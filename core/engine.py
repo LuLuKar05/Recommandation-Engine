@@ -69,14 +69,15 @@ class BookStore:
 
         target_user = self.users[target_user_id]
         
-        # 1. Candidate Generation (Use Inverted Index)
+        # --- STEP 1: Candidate Generation (Inverted Index) ---
         candidate_ids = set()
         for book_id in target_user.purchased_books:
             similar_readers = self.book_subscribers.get(book_id, set())
             candidate_ids.update(similar_readers)
+        
         candidate_ids.discard(target_user_id)
         
-        # 2. Scoring
+        # --- STEP 2: Scoring Neighbors (Jaccard) ---
         scored_neighbors = []
         for neighbor_id in candidate_ids:
             neighbor = self.users[neighbor_id]
@@ -84,22 +85,34 @@ class BookStore:
             if score > 0:
                 scored_neighbors.append((neighbor, score))
         
-        # 3. Ranking
+        # Sort neighbors by similarity (Highest first)
         scored_neighbors.sort(key=lambda x: x[1], reverse=True)
         
-        # 4. Extraction
-        if not scored_neighbors: return []
-        
-        # Get top neighbor
-        top_neighbor = scored_neighbors[0][0]
-        
-        # Find books neighbor read that target hasn't
-        rec_ids = top_neighbor.purchased_books - target_user.purchased_books
+        # --- STEP 3: Book Scoring (The "Weighted Ranking" Fix) ---
+        # We look at the Top 5 neighbors (The "Committee")
+        top_k = 5
+        book_scores = {} # {book_id: total_score}
+
+        for neighbor, sim_score in scored_neighbors[:top_k]:
+            # Find books this neighbor read that Target has NOT read
+            new_books = neighbor.purchased_books - target_user.purchased_books
+            
+            for book_id in new_books:
+                # The score of the book is the sum of the similarity scores
+                # of everyone who suggested it.
+                if book_id not in book_scores:
+                    book_scores[book_id] = 0
+                book_scores[book_id] += sim_score
+
+        # --- STEP 4: Final Sorting & Extraction ---
+        # Sort books by their calculated score (Most recommended first)
+        sorted_book_ids = sorted(book_scores.keys(), key=lambda bid: book_scores[bid], reverse=True)
         
         results = []
-        for bid in rec_ids:
+        for bid in sorted_book_ids:
             if bid in self.books:
                 results.append(self.books[bid])
+                
         return results
 
     def purchase_book(self, user_id, book_id):

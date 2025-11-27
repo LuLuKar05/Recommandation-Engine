@@ -1,18 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="text-center mb-5">
-    <h1>Select a User</h1>
-    <p class="lead">Log in as a user to see their history and get recommendations.</p>
+    <h1 class="fw-bold">System Simulation</h1>
+    <p class="lead text-muted">Select a User Persona to inspect their history and generate predictions.</p>
 </div>
 
-<div class="row">
+<div class="row g-4">
     {% for user in users %}
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">{{ user.name }}</h5>
-                <p class="text-muted">User ID: {{ user.user_id }}</p>
-                <a href="/user/{{ user.user_id }}" class="btn btn-primary">Login &rarr;</a>
+    <div class="col-md-4 col-lg-3">
+        <div class="card user-card h-100 text-center p-4 shadow-sm">
+            <div class="mx-auto">
+                <img src="https://robohash.org/{{ user.user_id }}?set=set4&size=100x100" class="avatar-img shadow-sm" alt="Avatar">
+            </div>
+            <div class="card-body p-0 mt-2">
+                <h5 class="fw-bold mb-1">{{ user.name }}</h5>
+                <p class="text-muted small mb-3">ID: #{{ user.user_id }}</p>
+                
+                <div class="d-grid">
+                    <a href="/user/{{ user.user_id }}" class="btn btn-outline-primary rounded-pill">
+                        <i class="fa-solid fa-user-astronaut me-2"></i> Simulate
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 mt-2">
+                <small class="text-muted">History: {{ user.purchased_books|length }} Books</small>
             </div>
         </div>
     </div>
