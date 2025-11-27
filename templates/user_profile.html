@@ -1,66 +1,96 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div class="d-flex align-items-center">
-        <img src="https://robohash.org/{{ user.user_id }}?set=set4&size=60x60" class="rounded-circle border me-3">
-        <div>
-            <h2 class="fw-bold mb-0">{{ user.name }}'s Library</h2>
-            <small class="text-muted">User ID: {{ user.user_id }}</small>
-        </div>
+<div class="d-flex align-items-center mb-5">
+    <img src="https://robohash.org/{{ user.user_id }}?set=set4&size=80x80" class="rounded-circle border shadow-sm me-3">
+    <div>
+        <h2 class="fw-bold mb-0">Welcome back, {{ user.name }}</h2>
+        <span class="text-muted">User ID: #{{ user.user_id }} • History: {{ my_books|length }} Books</span>
     </div>
-    <a href="/recommend/{{ user.user_id }}" class="btn btn-magic">
-        <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate AI Picks
-    </a>
 </div>
 
+<div class="mb-5">
+    <h4 class="fw-bold text-primary mb-3">
+        <i class="fa-solid fa-star me-2"></i>Recommended For You
+    </h4>
+    
+    {% if recommendations %}
+    <div class="row flex-nowrap overflow-auto pb-3"> {% for book in recommendations %}
+        <div class="col-md-3 col-8"> <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(to bottom, #fff, #f8f9fa);">
+                <div class="card-body">
+                    <span class="badge bg-warning text-dark mb-2">
+                        <i class="fa-solid fa-thumbs-up me-1"></i> Match
+                    </span>
+                    <h5 class="fw-bold text-dark">{{ book.title }}</h5>
+                    <small class="text-muted">{{ book.author }}</small>
+                    <div class="mt-2 text-primary small fw-bold">{{ book.genre }}</div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="/buy/{{ user.user_id }}/{{ book.book_id }}" class="btn btn-primary w-100 btn-sm">
+                        Buy Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info border-0 shadow-sm">
+        <i class="fa-solid fa-circle-info me-2"></i>
+        We don't have enough data to recommend books yet. <strong>Buy a few books from the catalog below!</strong>
+    </div>
+    {% endif %}
+</div>
+
+<hr class="my-5 text-muted">
+
 <div class="row">
-    <div class="col-md-7">
-        <h5 class="mb-3 text-muted text-uppercase fw-bold"><i class="fa-solid fa-book-open me-2"></i> Currently Reading</h5>
-        
-        {% if my_books %}
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 bg-light">
+            <div class="card-header bg-transparent border-0 fw-bold text-uppercase text-muted small">
+                Your Library
+            </div>
+            <div class="card-body">
+                {% if my_books %}
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% for book in my_books %}
+                    <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold d-block">{{ book.title }}</span>
+                            <small class="text-muted">{{ book.genre }}</small>
+                        </div>
+                        <i class="fa-solid fa-check text-success"></i>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <p class="text-muted text-center py-3">No books purchased yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <h4 class="fw-bold mb-3">Browse Full Catalog</h4>
         <div class="row g-3">
-            {% for book in my_books %}
-            <div class="col-4">
-                <div class="book-spine genre-{{ book.genre }}">
-                    <div class="fw-bold">{{ book.title }}</div>
-                    <div class="small opacity-75">{{ book.author }}</div>
-                    <div class="mt-2"><i class="fa-solid fa-bookmark opacity-50"></i></div>
+            {% for book in catalog %}
+            <div class="col-md-6">
+                <div class="card h-100 border shadow-sm user-card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="fw-bold mb-1">{{ book.title }}</h6>
+                            <small class="text-muted d-block">{{ book.author }}</small>
+                            <span class="badge bg-light text-dark border mt-2">{{ book.genre }}</span>
+                        </div>
+                        <a href="/buy/{{ user.user_id }}/{{ book.book_id }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                            <i class="fa-solid fa-cart-plus"></i> Buy
+                        </a>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        {% else %}
-            <div class="alert alert-light border text-center py-5">
-                <i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i>
-                <p>This library is empty.</p>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="col-md-5">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white border-0 py-3">
-                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-cart-shopping me-2"></i> Catalog</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="list-group list-group-flush">
-                    {% for book in all_books %}
-                        {% if book.book_id not in user.purchased_books %}
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <div class="fw-bold">{{ book.title }}</div>
-                                <span class="badge bg-light text-dark border">{{ book.genre }}</span>
-                            </div>
-                            <a href="/buy/{{ user.user_id }}/{{ book.book_id }}" class="btn btn-sm btn-outline-dark rounded-circle" style="width: 32px; height: 32px; padding: 0; line-height: 30px;">
-                                <i class="fa-solid fa-plus"></i>
-                            </a>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
 {% endblock %}
