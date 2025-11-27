@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="text-center mb-5">
+    <h1>Select a User</h1>
+    <p class="lead">Log in as a user to see their history and get recommendations.</p>
+</div>
+
+<div class="row">
+    {% for user in users %}
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.name }}</h5>
+                <p class="text-muted">User ID: {{ user.user_id }}</p>
+                <a href="/user/{{ user.user_id }}" class="btn btn-primary">Login &rarr;</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

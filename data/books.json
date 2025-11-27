@@ -1,0 +1,62 @@
+[
+    {
+        "book_id": 1,
+        "title": "Dune",
+        "author": "Frank Herbert",
+        "genre": "Sci-Fi"
+    },
+    {
+        "book_id": 2,
+        "title": "1984",
+        "author": "George Orwell",
+        "genre": "Dystopian"
+    },
+    {
+        "book_id": 3,
+        "title": "The Martian",
+        "author": "Andy Weir",
+        "genre": "Sci-Fi"
+    },
+    {
+        "book_id": 4,
+        "title": "Neuromancer",
+        "author": "William Gibson",
+        "genre": "Cyberpunk"
+    },
+    {
+        "book_id": 5,
+        "title": "Pride and Prejudice",
+        "author": "Jane Austen",
+        "genre": "Classic"
+    },
+    {
+        "book_id": 6,
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "genre": "Classic"
+    },
+    {
+        "book_id": 7,
+        "title": "Moby Dick",
+        "author": "Herman Melville",
+        "genre": "Classic"
+    },
+    {
+        "book_id": 8,
+        "title": "Harry Potter",
+        "author": "J.K. Rowling",
+        "genre": "Fantasy"
+    },
+    {
+        "book_id": 9,
+        "title": "The Hobbit",
+        "author": "J.R.R. Tolkien",
+        "genre": "Fantasy"
+    },
+    {
+        "book_id": 10,
+        "title": "A Game of Thrones",
+        "author": "George R.R. Martin",
+        "genre": "Fantasy"
+    }
+]

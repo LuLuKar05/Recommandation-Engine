@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="mb-4">
+    <a href="/user/{{ user.user_id }}" class="btn btn-outline-secondary">&larr; Back to Profile</a>
+</div>
+
+<div class="text-center mb-5">
+    <h2>Recommended for {{ user.name }}</h2>
+    <p>Based on users with similar reading patterns.</p>
+</div>
+
+{% if recommendations %}
+<div class="row justify-content-center">
+    {% for book in recommendations %}
+    <div class="col-md-8">
+        <div class="card border-success mb-3">
+            <div class="card-body">
+                <h3 class="card-title text-success">{{ book.title }}</h3>
+                <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                <p class="card-text">Genre: <span class="badge bg-success">{{ book.genre }}</span></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning text-center">
+    <h4>No recommendations found!</h4>
+    <p>Either you have read everything, or you have unique taste (no similar users found).</p>
+    <p>Try buying more books from the catalog to find a match.</p>
+</div>
+{% endif %}
+
+{% endblock %}

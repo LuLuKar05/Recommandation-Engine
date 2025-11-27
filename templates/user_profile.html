@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Hello, {{ user.name }}!</h1>
+    <a href="/recommend/{{ user.user_id }}" class="btn btn-success btn-lg">
+        ✨ Get AI Recommendations
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">Your Library (History)</div>
+            <ul class="list-group list-group-flush">
+                {% if my_books %}
+                    {% for book in my_books %}
+                        <li class="list-group-item">
+                            <strong>{{ book.title }}</strong><br>
+                            <small>{{ book.author }} ({{ book.genre }})</small>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-muted">You haven't read any books yet.</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Bookstore Catalog</div>
+            <div class="card-body">
+                <p>Buy books to change your recommendation score!</p>
+                <div class="list-group">
+                    {% for book in all_books %}
+                        {% if book.book_id not in user.purchased_books %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ book.title }}</strong>
+                                <span class="badge bg-light text-dark">{{ book.genre }}</span>
+                            </div>
+                            <a href="/buy/{{ user.user_id }}/{{ book.book_id }}" class="btn btn-sm btn-outline-primary">Buy</a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
