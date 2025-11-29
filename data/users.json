@@ -50,5 +50,10 @@
             1,
             5
         ]
+    },
+    {
+        "user_id": 106,
+        "name": "Lukax",
+        "purchased_books": []
     }
 ]

@@ -28,5 +28,16 @@
         </div>
     </div>
     {% endfor %}
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-3">
+                <h5 class="fw-bold text-muted"><i class="fa-solid fa-user-plus me-2"></i>Register New User</h5>
+                <form action="/add_user" method="POST" class="d-flex gap-2">
+                    <input type="text" name="username" class="form-control" placeholder="Enter Name (e.g. John Doe)" required>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

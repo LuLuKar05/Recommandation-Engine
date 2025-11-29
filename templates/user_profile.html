@@ -15,18 +15,23 @@
     </h4>
     
     {% if recommendations %}
-    <div class="row flex-nowrap overflow-auto pb-3"> {% for book in recommendations %}
-        <div class="col-md-3 col-8"> <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(to bottom, #fff, #f8f9fa);">
+    <div class="row flex-nowrap overflow-auto pb-3"> {% for item in recommendations %}
+        <div class="col-md-3 col-8">
+            <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(to bottom, #fff, #f8f9fa);">
                 <div class="card-body">
                     <span class="badge bg-warning text-dark mb-2">
                         <i class="fa-solid fa-thumbs-up me-1"></i> Match
                     </span>
-                    <h5 class="fw-bold text-dark">{{ book.title }}</h5>
-                    <small class="text-muted">{{ book.author }}</small>
-                    <div class="mt-2 text-primary small fw-bold">{{ book.genre }}</div>
+                    <h5 class="fw-bold text-dark">{{ item.book.title }}</h5>
+                    <small class="text-muted d-block">{{ item.book.author }}</small>
+                    <div class="mt-2 text-primary small fw-bold">{{ item.book.genre }}</div>
+                    
+                    <div class="mt-2 text-muted fst-italic border-top pt-2" style="font-size: 0.75rem;">
+                        <i class="fa-solid fa-circle-info me-1"></i> {{ item.reason }}
+                    </div>
                 </div>
                 <div class="card-footer bg-transparent border-0">
-                    <a href="/buy/{{ user.user_id }}/{{ book.book_id }}" class="btn btn-primary w-100 btn-sm">
+                    <a href="/buy/{{ user.user_id }}/{{ item.book.book_id }}" class="btn btn-primary w-100 btn-sm">
                         Buy Now
                     </a>
                 </div>
@@ -90,6 +95,49 @@
             </div>
             {% endfor %}
         </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="card bg-light border-0 mb-5 shadow-sm">
+    <div class="card-body">
+        <h5 class="fw-bold mb-3 text-secondary">
+            <i class="fa-solid fa-plus-circle me-2"></i>Admin: Add New Book to Library
+        </h5>
+        
+        <form action="/add_book" method="POST" class="row g-3 align-items-end">
+            <input type="hidden" name="user_id_redirect" value="{{ user.user_id }}">
+            
+            <div class="col-md-4">
+                <label class="form-label small text-muted">Book Title</label>
+                <input type="text" name="title" class="form-control" placeholder="e.g. The Hobbit" required>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label small text-muted">Author</label>
+                <input type="text" name="author" class="form-control" placeholder="e.g. J.R.R. Tolkien" required>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label small text-muted">Genre</label>
+                <select name="genre" class="form-select">
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Classic">Classic</option>
+                    <option value="Dystopian">Dystopian</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-dark w-100">
+                    <i class="fa-solid fa-save me-1"></i> Add
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

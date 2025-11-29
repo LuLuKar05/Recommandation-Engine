@@ -17,6 +17,28 @@ store = BookStore(data_dir=data_path)
 
 
 # --- ROUTES ---
+#Route to ADD A NEW USER
+@app.route('/add_user', methods=['POST'])
+def add_user():
+    username = request.form.get('username')
+    if username:
+        new_id = store.register_user(username)
+        print(f"Created User: {username} ({new_id})")
+    return redirect(url_for('index'))
+# Route to ADD A NEW BOOK
+@app.route('/add_book', methods=['POST'])
+def add_book():
+    title = request.form.get('title')
+    author = request.form.get('author')
+    genre = request.form.get('genre')
+    # Use request.referrer to go back to the same page
+    user_id = request.form.get('user_id_redirect') 
+    
+    if title and author and genre:
+        store.add_book(title, author, genre)
+        print(f"Added Book: {title}")
+        
+    return redirect(url_for('user_profile', user_id=user_id))
 
 @app.route('/')
 def index():
@@ -71,6 +93,9 @@ def buy_book(user_id, book_id):
     # Redirect back to the profile so the page refreshes 
     # and the recommendations update based on the new purchase.
     return redirect(url_for('user_profile', user_id=user_id))
+
+
+
 
 
 if __name__ == '__main__':
